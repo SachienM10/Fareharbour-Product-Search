@@ -12,7 +12,6 @@
             --accent-gold: #d4af37;
             --white: #ffffff;
             --bg-light: #faf9f6;
-            /* Google Sans stack with Outfit fallback */
             --font-main: "Google Sans", "Outfit", sans-serif;
         }
 
@@ -30,7 +29,6 @@
             min-height: 100vh;
         }
 
-        /* Minimalist Gold Clock */
         #clock {
             font-size: 1.1rem;
             font-weight: 600;
@@ -125,7 +123,6 @@
             box-shadow: 0 6px 15px rgba(197, 160, 89, 0.3);
         }
 
-        /* --- CALENDAR SECTION --- */
         #calendarWrapper {
             position: relative;
             width: 100%;
@@ -173,6 +170,50 @@
             border: none;
         }
 
+        /* --- FOOTER STYLES --- */
+        footer {
+            margin-top: 50px;
+            padding: 40px 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            border-top: 1px solid rgba(197, 160, 89, 0.1);
+        }
+
+        .profile-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-gold);
+            object-fit: cover;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .made-by {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #202124;
+            margin: 0;
+        }
+
+        .license-text {
+            font-size: 0.7rem;
+            color: #70757a;
+            line-height: 1.6;
+            margin-top: 20px;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         @media (max-width: 600px) {
             .input-row { flex-direction: column; }
         }
@@ -183,7 +224,7 @@
 <div id="clock">00:00:00</div>
 
 <div class="container">
-    <h2>Fareharbour Product Search</h2>
+    <h2>Booking Portal</h2>
     
     <div class="input-row">
         <div class="input-group">
@@ -205,6 +246,19 @@
     </div>
     <iframe id="calendarFrame" src="" allowfullscreen></iframe>
 </div>
+
+<footer>
+    <div class="profile-area">
+        <img src="unnamed.png" alt="Sachin Makadia" class="profile-img">
+        <p class="made-by">Made by Sachin Makadia</p>
+    </div>
+    
+    <div class="license-text">
+        <strong>MIT License</strong><br>
+        Copyright (c) 2026 Sachin Makadia<br>
+        Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files, to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software.
+    </div>
+</footer>
 
 <script>
     function updateClock() {
