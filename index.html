@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fareharbour Product Finder</title>
+    <title>Fareharbor Product Finder</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -42,15 +42,70 @@
             letter-spacing: 0.5px;
         }
 
+        /* --- Layout Container --- */
+        .main-layout {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            max-width: 900px;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
         .container {
             background: var(--white);
             padding: 40px;
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-            width: 100%;
-            max-width: 550px;
+            flex: 2;
             box-sizing: border-box;
             border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        /* --- History Sidebar --- */
+        .history-box {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            flex: 1;
+            min-width: 250px;
+            border: 1px solid rgba(197, 160, 89, 0.1);
+        }
+
+        .history-box h3 {
+            font-size: 0.9rem;
+            color: var(--primary-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0;
+            border-bottom: 1px solid #f1f3f4;
+            padding-bottom: 10px;
+        }
+
+        #historyList {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .history-item {
+            padding: 12px;
+            border-bottom: 1px solid #f8f9fa;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .history-item:hover {
+            background: #fcfaf0;
+        }
+
+        .history-item span {
+            display: block;
+            color: #70757a;
+            font-size: 0.75rem;
         }
 
         h2 {
@@ -170,7 +225,6 @@
             border: none;
         }
 
-        /* --- FOOTER STYLES --- */
         footer {
             margin-top: 50px;
             padding: 40px 20px;
@@ -214,6 +268,11 @@
             margin-right: auto;
         }
 
+        @media (max-width: 850px) {
+            .main-layout { flex-direction: column; align-items: center; }
+            .container, .history-box { width: 100%; }
+        }
+
         @media (max-width: 600px) {
             .input-row { flex-direction: column; }
         }
@@ -223,21 +282,30 @@
 
 <div id="clock">00:00:00</div>
 
-<div class="container">
-    <h2>Fareharbour Product Info</h2>
-    
-    <div class="input-row">
-        <div class="input-group">
-            <label>Supplier Name</label>
-            <input type="text" id="supplierName" placeholder="e.g. lookaroundtours" spellcheck="false">
+<div class="main-layout">
+    <div class="container">
+        <h2>Fareharbour Product Info</h2>
+        
+        <div class="input-row">
+            <div class="input-group">
+                <label>Supplier Name</label>
+                <input type="text" id="supplierName" placeholder="e.g. lookaroundtours" spellcheck="false">
+            </div>
+            <div class="input-group">
+                <label>Item ID</label>
+                <input type="text" id="itemId" placeholder="e.g. 576042" spellcheck="false">
+            </div>
         </div>
-        <div class="input-group">
-            <label>Item ID</label>
-            <input type="text" id="itemId" placeholder="e.g. 576042" spellcheck="false">
-        </div>
+
+        <button onclick="handleViewRequest()">View Availability</button>
     </div>
 
-    <button onclick="loadCalendar()">View Availability</button>
+    <div class="history-box">
+        <h3>Recent Visits</h3>
+        <div id="historyList">
+            <p style="font-size: 0.8rem; color: #999;">No history yet</p>
+        </div>
+    </div>
 </div>
 
 <div id="calendarWrapper">
@@ -269,31 +337,76 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    function loadCalendar() {
+    // Load history on startup
+    window.onload = displayHistory;
+
+    function handleViewRequest() {
         const supplier = document.getElementById('supplierName').value.trim();
         const id = document.getElementById('itemId').value.trim();
+
+        if (supplier && id) {
+            saveToHistory(supplier, id);
+            loadCalendar(supplier, id);
+        } else {
+            alert("Please provide both Supplier Name and Item ID.");
+        }
+    }
+
+    function saveToHistory(supplier, id) {
+        let history = JSON.parse(localStorage.getItem('fh_history')) || [];
+        
+        // Remove duplicate if it exists
+        history = history.filter(item => !(item.supplier === supplier && item.id === id));
+        
+        // Add to start
+        history.unshift({ supplier, id, time: new Date().toLocaleTimeString() });
+        
+        // Keep only 5
+        if (history.length > 5) history.pop();
+        
+        localStorage.setItem('fh_history', JSON.stringify(history));
+        displayHistory();
+    }
+
+    function displayHistory() {
+        const history = JSON.parse(localStorage.getItem('fh_history')) || [];
+        const listDiv = document.getElementById('historyList');
+        
+        if (history.length === 0) return;
+
+        listDiv.innerHTML = history.map(item => `
+            <div class="history-item" onclick="loadFromHistory('${item.supplier}', '${item.id}')">
+                <strong>${item.supplier}</strong>
+                <span>ID: ${item.id} • ${item.time}</span>
+            </div>
+        `).join('');
+    }
+
+    function loadFromHistory(supplier, id) {
+        document.getElementById('supplierName').value = supplier;
+        document.getElementById('itemId').value = id;
+        loadCalendar(supplier, id);
+    }
+
+    function loadCalendar(supplier, id) {
         const wrapper = document.getElementById('calendarWrapper');
         const frame = document.getElementById('calendarFrame');
         const loader = document.getElementById('loader');
 
-        if (supplier && id) {
-            wrapper.style.display = 'block';
-            loader.style.display = 'flex';
-            
-            const finalUrl = `https://fareharbor.com/embeds/book/${supplier}/items/${id}/calendar/2026/4/?full-items=yes`;
-            
-            frame.src = finalUrl;
-            
-            frame.onload = function() {
-                loader.style.display = 'none';
-            };
+        wrapper.style.display = 'block';
+        loader.style.display = 'flex';
+        
+        const finalUrl = `https://fareharbor.com/embeds/book/${supplier}/items/${id}/calendar/2026/4/?full-items=yes`;
+        
+        frame.src = finalUrl;
+        
+        frame.onload = function() {
+            loader.style.display = 'none';
+        };
 
-            setTimeout(() => {
-                wrapper.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        } else {
-            alert("Please provide both Supplier Name and Item ID.");
-        }
+        setTimeout(() => {
+            wrapper.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
     }
 </script>
 
