@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fareharbor Product Finder - Dashboard</title>
+    <title>Fareharbor Product Finder - Full Height</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,7 +11,7 @@
             --white: #ffffff;
             --bg-light: #faf9f6;
             --font-main: "Google Sans", "Outfit", sans-serif;
-            --sidebar-width: 350px;
+            --sidebar-width: 320px;
         }
 
         body {
@@ -20,7 +20,8 @@
             margin: 0;
             padding: 0;
             display: flex;
-            min-height: 100vh;
+            height: 100vh; /* Lock body to viewport height */
+            overflow: hidden; /* Prevent body scroll */
             color: #3c4043;
         }
 
@@ -29,145 +30,111 @@
             width: var(--sidebar-width);
             background: var(--white);
             height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
             border-right: 1px solid rgba(197, 160, 89, 0.1);
             display: flex;
             flex-direction: column;
-            padding: 30px;
+            padding: 25px;
             box-sizing: border-box;
             box-shadow: 4px 0 15px rgba(0, 0, 0, 0.02);
-            z-index: 100;
+            flex-shrink: 0;
         }
 
         #clock {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--primary-gold);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: center;
             background: #fcfaf0;
-            padding: 10px;
+            padding: 8px;
             border-radius: 50px;
         }
 
-        h2 {
-            font-size: 1.3rem;
-            color: #202124;
-            margin-bottom: 25px;
-            text-align: left;
-        }
+        h2 { font-size: 1.2rem; margin-bottom: 20px; }
 
-        .input-group {
-            margin-bottom: 15px;
-        }
+        .input-group { margin-bottom: 12px; }
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-weight: 600;
             color: var(--primary-gold);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         input {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             background: #f8f9fa;
             border: 1px solid #dadce0;
-            border-radius: 10px;
+            border-radius: 8px;
             box-sizing: border-box;
             font-family: var(--font-main);
-            margin-bottom: 5px;
         }
 
         button {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: var(--primary-gold);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 5px;
             transition: 0.3s;
         }
 
-        button:hover {
-            background: #b38f4d;
-            box-shadow: 0 4px 10px rgba(197, 160, 89, 0.3);
-        }
+        button:hover { background: #b38f4d; }
 
-        /* --- History Section --- */
+        /* --- History --- */
         .history-container {
-            margin-top: 40px;
+            margin-top: 30px;
             overflow-y: auto;
             flex-grow: 1;
         }
 
-        .history-title {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #9aa0a6;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            display: block;
-        }
+        .history-title { font-size: 0.7rem; font-weight: 600; color: #9aa0a6; text-transform: uppercase; margin-bottom: 10px; display: block; }
 
         .history-item {
             background: #fdfdfd;
             border: 1px solid #f1f3f4;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            font-size: 0.8rem;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.75rem;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .history-item:hover {
-            border-color: var(--primary-gold);
-            background: #fffef9;
-        }
+        .history-item:hover { border-color: var(--primary-gold); }
+        .history-link { display: block; color: var(--primary-gold); font-size: 0.6rem; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 4px;}
 
-        .history-item strong { display: block; color: #202124; }
-        .history-item span { color: #70757a; font-size: 0.7rem; }
-        .history-link { 
-            display: block; 
-            margin-top: 5px; 
-            color: var(--primary-gold); 
-            text-decoration: none; 
-            font-size: 0.65rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* --- Main Content Area (Right) --- */
+        /* --- Main Content Area (Full Height) --- */
         .main-content {
-            margin-left: var(--sidebar-width);
             flex-grow: 1;
-            padding: 40px;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            background: #eee; /* Visual distinction for empty area */
         }
 
         #calendarWrapper {
             width: 100%;
-            max-width: 1100px;
-            height: 80vh;
-            background: #fff;
-            border-radius: 20px;
+            height: 100%; /* Forces full height */
             display: none;
             position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-            overflow: hidden;
-            border: 1px solid rgba(0,0,0,0.03);
+            background: #fff;
+        }
+
+        #placeholderText {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9aa0a6;
+            background: var(--bg-light);
         }
 
         .loader {
@@ -190,21 +157,24 @@
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        iframe { width: 100%; height: 100%; border: none; }
-
-        footer {
-            margin-top: auto;
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
-        .profile-img { width: 50px; height: 50px; border-radius: 50%; margin-bottom: 10px; border: 2px solid var(--primary-gold); }
+        .footer-sidebar {
+            margin-top: auto;
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .profile-img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary-gold); }
 
-        @media (max-width: 900px) {
-            .sidebar { position: relative; width: 100%; height: auto; }
-            .main-content { margin-left: 0; }
-            body { flex-direction: column; }
+        @media (max-width: 800px) {
+            body { flex-direction: column; overflow: auto; height: auto; }
+            .sidebar { width: 100%; height: auto; }
+            .main-content { height: 80vh; }
         }
     </style>
 </head>
@@ -212,7 +182,7 @@
 
 <div class="sidebar">
     <div id="clock">00:00:00</div>
-    <h2>Product Finder</h2>
+    <h2>Booking Portal</h2>
     
     <div class="input-group">
         <label>Supplier Name</label>
@@ -224,28 +194,27 @@
         <input type="text" id="itemId" placeholder="576042">
     </div>
 
-    <button onclick="handleSearch()">View Availability</button>
+    <button onclick="handleSearch()">Search Availability</button>
 
     <div class="history-container">
-        <span class="history-title">Recently Viewed</span>
+        <span class="history-title">History</span>
         <div id="historyList"></div>
     </div>
 
-    <footer>
+    <div class="footer-sidebar">
         <img src="unnamed.png" alt="Sachin" class="profile-img">
-        <div style="font-size: 0.8rem; font-weight: 600;">Sachin Makadia</div>
-        <div style="font-size: 0.6rem; color: #999;">© 2026 MIT License</div>
-    </footer>
+        <div style="font-size: 0.75rem; font-weight: 600;">Sachin Makadia</div>
+    </div>
 </div>
 
 <div class="main-content">
+    <div id="placeholderText">
+        <p>← Enter details to load the calendar</p>
+    </div>
+
     <div id="calendarWrapper">
         <div id="loader" class="loader"><div class="spinner"></div></div>
         <iframe id="calendarFrame" src=""></iframe>
-    </div>
-    
-    <div id="placeholderText" style="margin-top: 20vh; color: #bdc1c6; text-align: center;">
-        <p>Enter details on the left to load the booking calendar.</p>
     </div>
 </div>
 
@@ -267,8 +236,6 @@
             const url = `https://fareharbor.com/embeds/book/${supplier}/items/${id}/calendar/2026/4/?full-items=yes`;
             saveHistory(supplier, id, url);
             launchCalendar(url);
-        } else {
-            alert("Please fill in both fields.");
         }
     }
 
@@ -286,28 +253,21 @@
     }
 
     function saveHistory(supplier, id, url) {
-        let history = JSON.parse(localStorage.getItem('fh_search_history')) || [];
-        // Remove existing to avoid dupes
+        let history = JSON.parse(localStorage.getItem('fh_history_full')) || [];
         history = history.filter(item => item.id !== id);
         history.unshift({ supplier, id, url, time: new Date().toLocaleTimeString() });
         if (history.length > 5) history.pop();
-        localStorage.setItem('fh_search_history', JSON.stringify(history));
+        localStorage.setItem('fh_history_full', JSON.stringify(history));
         displayHistory();
     }
 
     function displayHistory() {
-        const history = JSON.parse(localStorage.getItem('fh_search_history')) || [];
+        const history = JSON.parse(localStorage.getItem('fh_history_full')) || [];
         const container = document.getElementById('historyList');
-        
-        if (history.length === 0) {
-            container.innerHTML = '<p style="font-size: 0.7rem; color: #ccc;">No recent searches</p>';
-            return;
-        }
-
         container.innerHTML = history.map(item => `
             <div class="history-item" onclick="quickLoad('${item.supplier}', '${item.id}', '${item.url}')">
                 <strong>${item.supplier}</strong>
-                <span>ID: ${item.id} • ${item.time}</span>
+                <span>ID: ${item.id}</span>
                 <a href="${item.url}" class="history-link" target="_blank" onclick="event.stopPropagation()">${item.url}</a>
             </div>
         `).join('');
